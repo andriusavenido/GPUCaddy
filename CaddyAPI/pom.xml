@@ -57,6 +57,13 @@
             <artifactId>selenium-java</artifactId>
             <version>4.29.0</version>
         </dependency>
+
+		<dependency>
+			<groupId>io.github.bonigarcia</groupId>
+			<artifactId>webdrivermanager</artifactId>
+			<version>6.0.0</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
