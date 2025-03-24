@@ -1,0 +1,8 @@
+notes to add to this project:
+
+Scraping:
+- Reload whole database request every so often. Maybe on start up for now? If deployed every day.
+- For specific items, use by filter -> required front end
+- focus on scraping a whole page of gpus (AMD cards by product name) ->
+//https://www.canadacomputers.com/en/914/graphics-cards?q=GPU-Radeon+RX+9070+XT-Radeon+RX+9070
+//study this api, we will match the name in our database with canada computer's filters

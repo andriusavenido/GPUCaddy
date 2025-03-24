@@ -18,7 +18,7 @@ public class SeleniumTest {
         WebDriver driver = new ChromeDriver(options);
         driver.manage().timeouts().implicitlyWait(Duration.ofMillis(500));
 
-        driver.get("https://www.canadacomputers.com/en/");
+        driver.get("https://www.canadacomputers.com/en/916/powered-by-amd");
 
 
         System.out.println(driver.getTitle());
