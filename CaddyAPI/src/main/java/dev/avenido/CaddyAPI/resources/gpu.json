@@ -1,0 +1,37 @@
+[
+  {
+    "model": "Radeon RX 9070 XT",
+    "vram": 16,
+    "brand": "AMD"
+  },
+  {
+    "model": "Radeon RX 9070",
+    "vram": 16,
+    "brand": "AMD"
+  },
+  {
+    "model": "Radeon RX 7800 XT",
+    "vram" : 16,
+    "brand": "AMD"
+  },
+  {
+    "model": "GeForce RTX 5090",
+    "vram": 32,
+    "brand": "NVIDIA"
+  },
+  {
+    "model": "GeForce RTX 5080",
+    "vram": 16,
+    "brand": "NVIDIA"
+  },
+  {
+    "model": "GeForce RTX 5070 TI",
+    "vram" : 16,
+    "brand": "NVIDIA"
+  },
+  {
+    "model": "GeForce RTX 5070",
+    "vram" : 12,
+    "brand": "NVIDIA"
+  }
+]
