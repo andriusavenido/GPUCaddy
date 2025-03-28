@@ -11,7 +11,7 @@ import java.io.InputStream;
 import java.util.List;
 
 @Service
-public class GPUProductList {
+public class GPUProductList { // reads json file for generic product listings
 
     private List<GPUProductListing> gpuListing;
 
@@ -41,6 +41,6 @@ public class GPUProductList {
         return gpuModelList;
     }
 
-    //add further methods for fetching specs etc getSpecs(model)...
+    //TODO: add further methods for fetching specs etc getSpecs(model)...
 
 }

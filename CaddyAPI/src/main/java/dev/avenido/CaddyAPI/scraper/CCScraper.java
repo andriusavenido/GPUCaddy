@@ -3,7 +3,6 @@ package dev.avenido.CaddyAPI.scraper;
 //Canada Computers Scraper
 
 import dev.avenido.CaddyAPI.core.model.GPUProduct;
-import dev.avenido.CaddyAPI.core.model.GPUProductListing;
 import dev.avenido.CaddyAPI.core.service.GPUProductList;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -20,17 +19,17 @@ public class CCScraper extends BasicScraper{
 
     private final String baseUrl = "https://www.canadacomputers.com/en/915/desktop-graphics-cards";
 
-
-    public CCScraper(WebDriver driver, ScraperConfig config) {
-        super(driver, config); //use config driver as context
+    public CCScraper(WebDriver driver, ScraperConfig config, GPUProductList gpuProductList) {
+        super(driver, config, gpuProductList); //use config driver as context
     }
 
     @Override
-    public List<GPUProduct> scrapeAllGpuProducts(GPUProductList gpuProductList) {
+    public List<GPUProduct> scrapeAllGpuProducts() {
         List<GPUProduct> scrapedProducts = new ArrayList<>();
         try{
-            driver.get(baseUrl);
-
+            String[] modelList = gpuProductList.getGpuModelList();
+            this.navigateToUrl(baseUrl);
+            GenericScrape(scrapedProducts, modelList);
         } catch (Exception e){
         System.out.println("Error: " + e.getMessage());
     }
@@ -53,10 +52,8 @@ public class CCScraper extends BasicScraper{
                 else{
                     filterUrl.append(modelList[i].replace(" ", "+"));
                 }
-
             }
-            System.out.println(filterUrl.toString());
-            driver.get(filterUrl.toString());
+            this.navigateToUrl(filterUrl.toString());
             GenericScrape(scrapedProducts, modelList);
 
 
@@ -64,7 +61,7 @@ public class CCScraper extends BasicScraper{
             System.out.println("Error: " + e.getMessage());
         }
         finally{
-            config.restartWebDriver();
+            config.restartWebDriver(); //reset the driver
         }
 
         return scrapedProducts;
@@ -76,7 +73,7 @@ public class CCScraper extends BasicScraper{
      * @param modelList
      */
     private void GenericScrape(List<GPUProduct> scrapedProducts, String[] modelList){
-        //loop to address Canada Computers, new products must be loaded into the page by scrolling/clicking load more button
+        //loop to address Canada Computers page, new products must be loaded into the page by scrolling/clicking load more button
         while (true) {
             try {
                 WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
@@ -112,6 +109,7 @@ public class CCScraper extends BasicScraper{
 
         }
 
+        //create GPU product objects
         for (WebElement productCard : productCards){
             try{
                 String name = productCard.findElement(By.cssSelector(".product-title a")).getText();

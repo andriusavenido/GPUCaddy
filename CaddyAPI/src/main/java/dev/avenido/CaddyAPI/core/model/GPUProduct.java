@@ -1,12 +1,28 @@
 package dev.avenido.CaddyAPI.core.model;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "gpu_product")
 public class GPUProduct {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private String name;
     private String model;
     private String manufacturer;
     private String price;
 //    private boolean inStore;
 //    private boolean inPerson;
+
+    public GPUProduct() {
+        this.name = "";
+        this.model = "";
+        this.manufacturer = "";
+        this.price = "";
+    }
 
     public GPUProduct(String name, String model, String manufacturer, String price) {
         this.name = name;
