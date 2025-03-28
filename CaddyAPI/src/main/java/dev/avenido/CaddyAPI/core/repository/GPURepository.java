@@ -12,6 +12,7 @@ public interface GPURepository extends JpaRepository<GPUProduct, Long> {
     //single attribute query
     List<GPUProduct> findByModel (String model);
     List<GPUProduct> findByManufacturer (String manufacturer);
+    List<GPUProduct> findByName (String name);
 
     //add more needed
 
