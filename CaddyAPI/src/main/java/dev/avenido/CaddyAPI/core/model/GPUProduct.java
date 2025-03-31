@@ -19,6 +19,7 @@ public class GPUProduct {
 //    private boolean inStore;
 //    private boolean inPerson;
     private LocalDate lastUpdated;
+//    private String url; TODO
 
     public GPUProduct() {
         this.name = "";

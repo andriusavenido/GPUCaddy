@@ -14,6 +14,6 @@ public interface GPURepository extends JpaRepository<GPUProduct, Long> {
     List<GPUProduct> findByManufacturer (String manufacturer);
     List<GPUProduct> findByName (String name);
 
-    //add more needed
+    //add filter query
 
 }

@@ -31,8 +31,8 @@ public class CCScraper extends BasicScraper{
             this.navigateToUrl(baseUrl);
             GenericScrape(scrapedProducts, modelList);
         } catch (Exception e){
-        System.out.println("Error: " + e.getMessage());
-    }
+         throw new RuntimeException(e.getMessage());
+        }
         finally{
         config.restartWebDriver();
     }
@@ -40,7 +40,7 @@ public class CCScraper extends BasicScraper{
     }
 
     @Override
-    public List<GPUProduct> scrapeByFilter(String[] modelList) {
+    public List<GPUProduct> scrapeByModel(String[] modelList) {
         List<GPUProduct> scrapedProducts = new ArrayList<>();
         try{
             StringBuilder filterUrl = new StringBuilder(baseUrl + "?q=GPU-");
@@ -58,7 +58,7 @@ public class CCScraper extends BasicScraper{
 
 
         } catch (Exception e){
-            System.out.println("Error: " + e.getMessage());
+            throw new RuntimeException(e.getMessage());
         }
         finally{
             config.restartWebDriver(); //reset the driver

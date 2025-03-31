@@ -23,33 +23,52 @@ public class GPUService {
         this.gpuRepository = gpuRepository;
     }
 
-    public void refreshAllDataBySite(String site){
-        BasicScraper scraper = scraperFactory.getScraper(site);
-        List<GPUProduct> scrapedList = scraper.scrapeAllGpuProducts();
+    public boolean refreshAllDataBySite(String site){
+        try {
+            BasicScraper scraper = scraperFactory.getScraper(site);
+            List<GPUProduct> scrapedList = scraper.scrapeAllGpuProducts();
+            updateProductsByList(scrapedList);
+            return true;
+        } catch (RuntimeException e) {
+            System.err.println("Error refreshing site " + site + ": " + e.getMessage());
+            return false;
+        }
+    }
 
+    public boolean refreshByModels(String site, String[] modelList){
+        try{
+            BasicScraper scraper = scraperFactory.getScraper(site);
+            List<GPUProduct> scrapedList = scraper.scrapeByModel(modelList);
+            updateProductsByList(scrapedList);
+            return true;
+        }catch (RuntimeException e) {
+            System.err.println("Error refreshing site " + site + ": " + e.getMessage());
+            return false;
+        }
+
+    }
+
+    private void updateProductsByList(List<GPUProduct> scrapedList){
         for (GPUProduct gpuProduct : scrapedList){
             List<GPUProduct> existingProducts = gpuRepository.findByName(gpuProduct.getName());
-
-            //update existing products
             if (!existingProducts.isEmpty()){
                 GPUProduct existingProduct = existingProducts.getFirst();
                 existingProduct.setPrice(gpuProduct.getPrice());
                 existingProduct.setLastUpdated(gpuProduct.getLastUpdated());
                 gpuRepository.save(existingProduct);
             }else{
-                //save new product
                 gpuRepository.save(gpuProduct);
             }
-
         }
     }
 
-    //TODO refresh a single model
-    public void refreshModel(String site, String model){
+    //BEEG: fetch methods from database
 
+    //TODO filter might be done through repository
+    public List<GPUProduct> getProductsByFilter(String[] filter){
+        return null;
     }
 
-    //BEEG: fetch methods from database
     public List<GPUProduct> fetchAllGpuProducts(){return gpuRepository.findAll();}
     public List<GPUProduct> fetchGpuProductsByModel(String model){return gpuRepository.findByModel(model);}
     public List<GPUProduct> fetchGpuProductsByManufacturer(String manufacturer){return gpuRepository.findByManufacturer(manufacturer);}

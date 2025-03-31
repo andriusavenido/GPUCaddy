@@ -21,10 +21,9 @@ public abstract class BasicScraper {
         this.gpuProductList = gpuProductList;
     }
 
-    @Autowired
     public abstract List<GPUProduct> scrapeAllGpuProducts();
 
-    public abstract List<GPUProduct> scrapeByFilter(String[] modelList);
+    public abstract List<GPUProduct> scrapeByModel(String[] modelList);
 
 
     protected void navigateToUrl(String url) {
