@@ -1,5 +1,7 @@
 package dev.avenido.CaddyAPI.core.model;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import java.util.HashMap;
 
 /**
@@ -12,6 +14,7 @@ public class GPURequest {
 
     private String site;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private HashMap<String, String> filter; //model: ,
 
 

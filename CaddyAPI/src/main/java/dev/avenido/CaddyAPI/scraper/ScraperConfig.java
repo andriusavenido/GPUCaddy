@@ -18,22 +18,28 @@ public class ScraperConfig {
     private WebDriver webDriver;
 
     @Bean //bean singleton, one web driver
-    @Lazy //created the first time it is accessed
     public WebDriver webDriver() {
         if (this.webDriver== null) {
-            WebDriverManager.chromedriver().setup();
-            ChromeOptions options = new ChromeOptions();
-            options.addArguments("--headless", "--disable-gpu");
-            this.webDriver = new ChromeDriver(options);
+            this.webDriver = createWebDriver();
         }
 
         return this.webDriver;
     }
+    private WebDriver createWebDriver() {
+        WebDriverManager.chromedriver().setup();
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("--headless", "--disable-gpu");
+        return new ChromeDriver(options);
+    }
 
-    public void restartWebDriver() { //quit driver until next use
+    public synchronized void restartWebDriver() {
+        System.out.println("From Config: Restarting WebDriver");
+
         if (this.webDriver != null) {
-            this.webDriver.quit();
+            try{
+                this.webDriver.quit();
+            }catch (Exception ignored){}
         }
-        this.webDriver = null;
+        this.webDriver = createWebDriver();
     }
 }

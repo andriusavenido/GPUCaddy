@@ -15,7 +15,6 @@ public abstract class BasicScraper {
     protected GPUProductList gpuProductList;
 
     public BasicScraper(WebDriver driver, ScraperConfig config, GPUProductList gpuProductList) {
-        config.restartWebDriver();
         this.driver = driver;
         this.config = config;
         this.gpuProductList = gpuProductList;
@@ -33,7 +32,7 @@ public abstract class BasicScraper {
             System.err.println("Invalid URL provided: " + url);
             throw new RuntimeException("Navigation failed due to invalid URL.", e);
         } catch (NoSuchSessionException | SessionNotCreatedException e) {
-            System.err.println("WebDriver session issue encountered. Restarting...");
+            System.err.println("WebDriver session issue encountered. Restarting..." + e.getMessage());
             config.restartWebDriver();
             throw new RuntimeException("Navigation failed due to WebDriver session issue.", e);
         } catch (TimeoutException e) {

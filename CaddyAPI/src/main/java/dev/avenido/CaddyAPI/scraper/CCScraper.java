@@ -4,6 +4,7 @@ package dev.avenido.CaddyAPI.scraper;
 
 import dev.avenido.CaddyAPI.core.model.GPUProduct;
 import dev.avenido.CaddyAPI.core.service.GPUProductList;
+import lombok.extern.slf4j.Slf4j;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -14,6 +15,7 @@ import java.time.Duration;
 import java.util.*;
 import java.util.NoSuchElementException;
 
+@Slf4j
 @Service
 public class CCScraper extends BasicScraper{
 
@@ -31,11 +33,10 @@ public class CCScraper extends BasicScraper{
             this.navigateToUrl(baseUrl);
             GenericScrape(scrapedProducts, modelList);
         } catch (Exception e){
-         throw new RuntimeException(e.getMessage());
+            log.error("Failed Scrape:{}", e.getMessage());
+            config.restartWebDriver();
+            throw new RuntimeException(e.getMessage());
         }
-        finally{
-        config.restartWebDriver();
-    }
         return scrapedProducts;
     }
 
@@ -58,10 +59,9 @@ public class CCScraper extends BasicScraper{
 
 
         } catch (Exception e){
+            log.error("Failed Scrape:{}", e.getMessage());
+            config.restartWebDriver();
             throw new RuntimeException(e.getMessage());
-        }
-        finally{
-            config.restartWebDriver(); //reset the driver
         }
 
         return scrapedProducts;
@@ -93,10 +93,10 @@ public class CCScraper extends BasicScraper{
                 // Wait for new products/content to load before proceeding
                 wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector(".js-product")));
             } catch (NoSuchElementException | TimeoutException | ElementNotInteractableException e) {
-                System.out.println("No 'Load More' button or no more content to load.");
+                log.info("CC Scraper: No 'Load More' button or no more content to load");
                 break;
             } catch (Exception e) {
-                System.out.println("An unexpected error occurred: " + e.getMessage());
+                log.error("An unexpected error occurred: {}",e.getMessage());
                 break;
             }
         }
@@ -105,8 +105,7 @@ public class CCScraper extends BasicScraper{
         List<WebElement> productCards = driver.findElements(By.cssSelector(".js-product"));
 
         if (productCards.isEmpty()) {
-            System.out.println("No products found");
-
+            log.info("CC Scraper: No products found");
         }
 
         //create GPU product objects
@@ -117,9 +116,12 @@ public class CCScraper extends BasicScraper{
                 String model =matchModel.orElse("");
                 String manufacturer = name.split(" ")[0];
                 String price = productCard.findElement(By.cssSelector(".price")).getText();
-                scrapedProducts.add(new GPUProduct(name, model, manufacturer, price));
+                if (!model.isEmpty()){
+                    scrapedProducts.add(new GPUProduct(name, model, manufacturer, price));
+                }
+
             } catch (NoSuchElementException e){
-                System.out.println("No product found" + e.getMessage());
+               log.info("CC Scraper:{}", e.getMessage());
             }
         }
     }

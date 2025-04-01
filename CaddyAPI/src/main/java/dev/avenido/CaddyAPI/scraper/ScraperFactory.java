@@ -22,7 +22,7 @@ public class ScraperFactory {
             System.out.println("Scraper not found");
             throw new IllegalArgumentException("Scraper not found");
         }
-        System.out.println("Scraper found");
+        System.out.println("Scraper found in factory");
         return scraper;
     }
 }
